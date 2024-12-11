@@ -7,6 +7,7 @@ A secure chat application implemented using Node.js. It utilizes the TLS protoco
 - Encrypted communication using TLS.
 - Multi-client chat with broadcast functionality.
 - Simple and customizable message protocol.
+- User identification with unique names for clients.
 - SQLite integration for user and message history (extensible).
 
 ---
@@ -23,7 +24,7 @@ Ensure you have the following installed:
 ### 2. Clone the Repository
 
 ```bash
-git clone <repository_url>
+git clone <https://github.com/Ting-Tech/GroupChatRoom.git>
 cd secure-chat
 ```
 
@@ -84,17 +85,24 @@ Run the client in another terminal:
 node client.js
 ```
 
+Follow the prompt to enter a unique username.
+
 Expected output:
 
 ```
 Connected to server
+Enter your username: Alice
 ```
 
 ### Chat Example
 
 1. Type a message in the client terminal.
 2. The message will be broadcast to all connected clients.
-3. Open multiple terminals to test with multiple clients.
+3. Each message will show the sender's name, e.g.:
+   ```
+   Alice: Hello, everyone!
+   ```
+4. Open multiple terminals to test with multiple clients.
 
 ---
 

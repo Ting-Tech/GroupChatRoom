@@ -1,34 +1,40 @@
 const tls = require('tls');
 const readline = require('readline');
-const { encodeMessage, decodeMessage } = require('./protocol');
 
-// 連接伺服器
-const client = tls.connect(8000, { rejectUnauthorized: false }, () => {
-    console.log('Connected to server');
-    sendLoginMessage();
+// 配置連線選項
+const options = {
+  host: 'localhost',
+  port: 8000,
+  rejectUnauthorized: false,
+};
+
+// 連接到服務器
+const client = tls.connect(options, () => {
+  console.log('Connected to server.');
+  rl.question('Enter your username: ', (answer) => {
+    client.write(answer);
+  });
 });
 
-// 讀取輸入
+// 處理輸入和輸出
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
+  input: process.stdin,
+  output: process.stdout,
 });
 
-rl.on('line', (line) => {
-    const message = encodeMessage('broadcast', 'User', 'All', line);
-    client.write(message);
-});
-
-// 接收伺服器訊息
 client.on('data', (data) => {
-    const message = decodeMessage(data);
-    if (message) {
-        console.log(`${message.from}: ${message.content}`);
-    }
+  console.log(data.toString().trim());
 });
 
-// 登入訊息
-function sendLoginMessage() {
-    const message = encodeMessage('login', 'User', 'Server', 'Hello!');
-    client.write(message);
-}
+client.on('end', () => {
+  console.log('Disconnected from server.');
+});
+
+client.on('error', (err) => {
+  console.error('Connection error:', err.message);
+});
+
+// 傳送訊息
+rl.on('line', (line) => {
+  client.write(line);
+});
